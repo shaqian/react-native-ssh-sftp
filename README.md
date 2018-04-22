@@ -54,7 +54,7 @@ NMSSH is required for iOS.
 
 ## Demo
 
-![example](example.gif)
+![example](https://raw.githubusercontent.com/shaqian/react-native-ssh-sftp/master/example.gif)
 
 ## Run demo
 

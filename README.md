@@ -82,8 +82,8 @@ react-native run-android
 import SSHClient from 'react-native-ssh-sftp';
 
 let client = new SSHClient('10.0.0.10', 22, 'user', 'password', (error) => {
-	if (error) {
-		console.warn(error);
+  if (error) {
+    console.warn(error);
 });
 ```
 
@@ -92,8 +92,8 @@ let client = new SSHClient('10.0.0.10', 22, 'user', 'password', (error) => {
 import SSHClient from 'react-native-ssh-sftp';
 
 let client = new SSHClient('10.0.0.10', 22, 'user', {privateKey: '-----BEGIN RSA......'}, (error) => {
-	if (error) {
-		console.warn(error);
+  if (error) {
+    console.warn(error);
 });
 ```
 
@@ -115,7 +115,7 @@ var command = 'ls -l';
 client.execute(command, (error, output) => {
   if (error)
     console.warn(error);
-	if (output)
+  if (output)
     console.warn(output);
 });
 ```
@@ -161,6 +161,7 @@ client.closeShell();
 client.connectSFTP((error) => {
   if (error)
     console.warn(error);
+});
 ```
 
 #### List directory: 
@@ -169,7 +170,7 @@ var path = '.';
 client.sftpLs(path, (error, response) => {
   if (error)
     console.warn(error);
-	if (response)
+  if (response)
     console.warn(response);
 });
 ```

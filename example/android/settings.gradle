@@ -1,0 +1,4 @@
+rootProject.name = 'example'
+include ':react-native-ssh-sftp'
+project(':react-native-ssh-sftp').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-ssh-sftp/android')
+include ':app'

@@ -113,10 +113,10 @@ client.disconnect();
 ```javascript
 var command = 'ls -l';
 client.execute(command, (error, output) => {
-	if (error)
-		console.warn(error);
+  if (error)
+    console.warn(error);
 	if (output)
-		console.warn(output);
+    console.warn(output);
 });
 ```
 
@@ -127,16 +127,16 @@ client.execute(command, (error, output) => {
 ```javascript
 var ptyType = 'vanilla';
 client.startShell(ptyType, (error) => {
-	if (error)
-		console.warn(error);
+  if (error)
+    console.warn(error);
 });
 ```
 
 #### Read from shell:
 ```javascript
 client.on('Shell', (event) => {
-	if (event)
-		console.warn(event);
+  if (event)
+    console.warn(event);
 });
 ```
 
@@ -144,8 +144,8 @@ client.on('Shell', (event) => {
 ```javascript
 var str = 'ls -l\n';
 client.writeToShell(str, (error) => {
-	if (error) 
-		console.warn(error);
+  if (error) 
+    console.warn(error);
 });
 ```
 
@@ -159,50 +159,50 @@ client.closeShell();
 #### Connect SFTP
 ```javascript
 client.connectSFTP((error) => {
-	if (error)
-		console.warn(error);
+  if (error)
+    console.warn(error);
 ```
 
 #### List directory: 
 ```javascript
 var path = '.';
 client.sftpLs(path, (error, response) => {
-	if (error)
-		console.warn(error);
+  if (error)
+    console.warn(error);
 	if (response)
-		console.warn(response);
+    console.warn(response);
 });
 ```
 
 #### Create directory: 
 ```javascript
 client.sftpMkdir('dirName', (error) => {
-	if (error)
-		console.warn(error);
+  if (error)
+    console.warn(error);
 });
 ```
 
 #### Rename directory: 
 ```javascript
 client.sftpRename('oldName', 'newName', (error) => {
-	if (error)
-		console.warn(error);
+  if (error)
+    console.warn(error);
 });
 ```
 
 #### Remove directory: 
 ```javascript
 client.sftpRmdir('dirName', (error) => {
-	if (error)
-		console.warn(error);
+  if (error)
+    console.warn(error);
 });
 ```
 
 #### Remove file: 
 ```javascript
 client.sftpRm('fileName', (error) => {
-	if (error)
-		console.warn(error);
+  if (error)
+    console.warn(error);
 });
 ```
 
@@ -227,8 +227,8 @@ client.sftpCancelDownload();
 #### Upload file: 
 ```javascript
 client.sftpUpload('[path-to-local-file]', '[path-to-remote-directory]', (error) => {
-	if (error)
-		console.warn(error);
+  if (error)
+    console.warn(error);
 });
 
 // Upload progress

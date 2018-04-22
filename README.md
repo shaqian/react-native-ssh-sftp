@@ -82,7 +82,7 @@ react-native run-android
 import SSHClient from 'react-native-ssh-sftp';
 
 let client = new SSHClient('10.0.0.10', 22, 'user', 'password', (error) => {
-  if (error) {
+  if (error)
     console.warn(error);
 });
 ```
@@ -92,7 +92,7 @@ let client = new SSHClient('10.0.0.10', 22, 'user', 'password', (error) => {
 import SSHClient from 'react-native-ssh-sftp';
 
 let client = new SSHClient('10.0.0.10', 22, 'user', {privateKey: '-----BEGIN RSA......'}, (error) => {
-  if (error) {
+  if (error)
     console.warn(error);
 });
 ```

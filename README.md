@@ -54,7 +54,7 @@ NMSSH is required for iOS.
 
 ## Demo
 
-![example][example.gif]
+![example](example.gif)
 
 ## Run demo
 

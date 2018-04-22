@@ -77,7 +77,7 @@ react-native run-android
 
 ## Usage
 
-### Create a client using username and password authentication
+### Create a client using password authentication
 ```javascript
 import SSHClient from 'react-native-ssh-sftp';
 
@@ -87,7 +87,7 @@ let client = new SSHClient('10.0.0.10', 22, 'user', 'password', (error) => {
 });
 ```
 
-### Create a client using username and public key authentication
+### Create a client using public key authentication
 ```javascript
 import SSHClient from 'react-native-ssh-sftp';
 

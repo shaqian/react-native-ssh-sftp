@@ -56,6 +56,9 @@ NMSSH is required for iOS.
 
 ![example](https://raw.githubusercontent.com/shaqian/react-native-ssh-sftp/master/example.gif)
 
+This library is also used in iOS app PiHelper. 
+<a href="https://itunes.apple.com/us/app/pihelper/id1369930932"><img src="https://is4-ssl.mzstatic.com/image/thumb/Purple128/v4/ba/5b/59/ba5b592a-5446-1c21-6703-3eb3fb25007e/AppIcon-1x_U007emarketing-85-220-9.png/246x0w.jpg" align="left" height="75" width="75" ></a>
+
 ## Run demo
 
 ### iOS
@@ -97,7 +100,7 @@ let client = new SSHClient('10.0.0.10', 22, 'user', {privateKey: '-----BEGIN RSA
 });
 ```
 
-* Public key authentication also supports:
+- Public key authentication also supports:
 ```
 {privateKey: '-----BEGIN RSA......'}
 {privateKey: '-----BEGIN RSA......', publicKey: 'ssh-rsa AAAAB3NzaC1yc2EA......'}
@@ -183,7 +186,7 @@ client.sftpMkdir('dirName', (error) => {
 });
 ```
 
-#### Rename directory: 
+#### Rename file or directory: 
 ```javascript
 client.sftpRename('oldName', 'newName', (error) => {
   if (error)

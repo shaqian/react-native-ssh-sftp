@@ -21,7 +21,7 @@ NMSSH is required for iOS.
 2. Open Podfile and add:
 	```
 	target '[your project's name]' do
-		pod 'NMSSH'
+		pod 'NMSSH', '2.2.8'
 	end
 	```
 3. Install Pod:

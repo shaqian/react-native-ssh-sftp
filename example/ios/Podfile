@@ -2,5 +2,5 @@
 # platform :ios, '9.0'
 
 target 'example' do
-  pod 'NMSSH'
+  pod 'NMSSH', '2.2.8'
 end

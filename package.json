@@ -18,11 +18,11 @@
   "author": "Qian Sha",
   "license": "MIT",
   "peerDependencies": {
-    "react-native": "^0.54.0"
+    "react-native": "*"
   },
-  "repository" :
-  {
-    "type" : "git",
-    "url" : "https://github.com/shaqian/react-native-ssh-sftp.git"
+  "types": "./index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SpiriaJWF/react-native-ssh-sftp.git"
   }
 }

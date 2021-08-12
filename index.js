@@ -1,9 +1,4 @@
-import {
-  Platform,
-  NativeModules,
-  NativeEventEmitter,
-  DeviceEventEmitter
-} from 'react-native';
+import { Platform, NativeModules, NativeEventEmitter, DeviceEventEmitter } from "react-native";
 
 const { RNSSHClient } = NativeModules;
 
@@ -11,17 +6,19 @@ const RNSSHClientEmitter = new NativeEventEmitter(RNSSHClient);
 
 class SSHClient {
   // passwordOrKey: password or {privateKey: value, [publicKey: value, passphrase: value]}
-	constructor(host, port, username, passwordOrKey, callback) {
-    this._key = Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+  constructor(host, port, username, passwordOrKey, callback) {
+    this._key = Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
     this.handlers = {};
     this.host = host;
     this.port = port;
     this.username = username;
     this.passwordOrKey = passwordOrKey;
     this.connect(callback);
-	}
+  }
 
-  _handleEvent (event) {
+  _handleEvent(event) {
     if (this.handlers.hasOwnProperty(event.name) && this._key === event.key) {
       this.handlers[event.name](event.value);
     }
@@ -34,20 +31,38 @@ class SSHClient {
   connect(callback) {
     if (Platform.OS === "android") {
       if (typeof this.passwordOrKey === "string")
-        RNSSHClient.connectToHostByPassword(this.host, this.port, this.username, this.passwordOrKey, this._key,
+        RNSSHClient.connectToHostByPassword(
+          this.host,
+          this.port,
+          this.username,
+          this.passwordOrKey,
+          this._key,
           (error) => {
             callback && callback(error);
-          });
+          }
+        );
       else
-        RNSSHClient.connectToHostByKey(this.host, this.port, this.username, this.passwordOrKey, this._key,
+        RNSSHClient.connectToHostByKey(
+          this.host,
+          this.port,
+          this.username,
+          this.passwordOrKey,
+          this._key,
           (error) => {
             callback && callback(error);
-          });
+          }
+        );
     } else {
-      RNSSHClient.connectToHost(this.host, this.port, this.username, this.passwordOrKey, this._key,
+      RNSSHClient.connectToHost(
+        this.host,
+        this.port,
+        this.username,
+        this.passwordOrKey,
+        this._key,
         (error) => {
           callback && callback(error);
-        });
+        }
+      );
     }
   }
 
@@ -58,11 +73,11 @@ class SSHClient {
   }
 
   // ptyType: vanilla, vt100, vt102, vt220, ansi, xterm
-	startShell(ptyType, callback) {
-    if (Platform.OS === 'ios') {
-      this.shellListener = RNSSHClientEmitter.addListener('Shell', this._handleEvent.bind(this));
+  startShell(ptyType, callback) {
+    if (Platform.OS === "ios") {
+      this.shellListener = RNSSHClientEmitter.addListener("Shell", this._handleEvent.bind(this));
     } else {
-      this.shellListener = DeviceEventEmitter.addListener('Shell', this._handleEvent.bind(this));
+      this.shellListener = DeviceEventEmitter.addListener("Shell", this._handleEvent.bind(this));
     }
     RNSSHClient.startShell(this._key, ptyType, (error, response) => {
       callback && callback(error, response);
@@ -86,12 +101,24 @@ class SSHClient {
   connectSFTP(callback) {
     RNSSHClient.connectSFTP(this._key, (error) => {
       callback && callback(error);
-      if (Platform.OS === 'ios') {
-        this.downloadProgressListener = RNSSHClientEmitter.addListener('DownloadProgress', this._handleEvent.bind(this));
-        this.uploadProgressListener = RNSSHClientEmitter.addListener('UploadProgress', this._handleEvent.bind(this));
+      if (Platform.OS === "ios") {
+        this.downloadProgressListener = RNSSHClientEmitter.addListener(
+          "DownloadProgress",
+          this._handleEvent.bind(this)
+        );
+        this.uploadProgressListener = RNSSHClientEmitter.addListener(
+          "UploadProgress",
+          this._handleEvent.bind(this)
+        );
       } else {
-        this.downloadProgressListener = DeviceEventEmitter.addListener('DownloadProgress', this._handleEvent.bind(this));
-        this.uploadProgressListener = DeviceEventEmitter.addListener('UploadProgress', this._handleEvent.bind(this));
+        this.downloadProgressListener = DeviceEventEmitter.addListener(
+          "DownloadProgress",
+          this._handleEvent.bind(this)
+        );
+        this.uploadProgressListener = DeviceEventEmitter.addListener(
+          "UploadProgress",
+          this._handleEvent.bind(this)
+        );
       }
     });
   }
@@ -147,24 +174,23 @@ class SSHClient {
   }
 
   disconnectSFTP() {
-    if (this.downloadProgressListener) {
-      this.downloadProgressListener.remove();
-      this.downloadProgressListener = null;
+    if (Platform.OS !== "ios") {
+      if (this.downloadProgressListener) {
+        this.downloadProgressListener.remove();
+        this.downloadProgressListener = null;
+      }
+      if (this.uploadProgressListener) {
+        this.uploadProgressListener.remove();
+        this.uploadProgressListener = null;
+      }
+      RNSSHClient.disconnectSFTP(this._key);
     }
-    if (this.uploadProgressListener) {
-      this.uploadProgressListener.remove();
-      this.uploadProgressListener = null;
-    }
-    RNSSHClient.disconnectSFTP(this._key);
   }
 
   disconnect() {
-    if (this.shellListener)
-      this.shellListener.remove();
-    if (this.downloadProgressListener)
-      this.downloadProgressListener.remove();
-    if (this.uploadProgressListener)
-      this.uploadProgressListener.remove();
+    if (this.shellListener) this.shellListener.remove();
+    if (this.downloadProgressListener) this.downloadProgressListener.remove();
+    if (this.uploadProgressListener) this.uploadProgressListener.remove();
     RNSSHClient.disconnect(this._key);
   }
 }

@@ -8,7 +8,7 @@ declare module "react-native-ssh-sftp" {
       address: string,
       port: number,
       username: string,
-      credential: string | { privateKey?: string; publicKey?: string },
+      credential: string | { privateKey?: string; publicKey?: string; passphrase?: string },
       callback?: Callback
     );
     startShell: (ptyType: PtyType, callback: Callback) => void;

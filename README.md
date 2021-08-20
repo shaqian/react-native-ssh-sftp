@@ -10,7 +10,7 @@ npm install react-native-ssh-sftp --save
 
 ## Demo
 
-![example](https://raw.githubusercontent.com/SpiriaJWF/react-native-ssh-sftp/master/example.gif)
+![example](https://raw.githubusercontent.com/shaqian/react-native-ssh-sftp/master/example.gif)
 
 - This library is also used in iOS app PiHelper.
 

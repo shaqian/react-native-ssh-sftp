@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.license          = package['license']
   s.homepage         = package['repository']['url']
   s.authors          = package['author']
-  s.source           = { :git => 'https://github.com/SpiriaJWF/react-native-ssh-sftp.git', :tag => s.version }
+  s.source           = { :git => 'https://github.com/shaqian/react-native-ssh-sftp.git', :tag => s.version }
   s.source_files     = 'ios/**/*.{h,m}'
   s.requires_arc     = true
   s.platforms        = { :ios => "11.0", :tvos => "9.2" }

@@ -12,8 +12,8 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/shaqian/react-native-ssh-sftp.git', :tag => s.version }
   s.source_files     = 'ios/**/*.{h,m}'
   s.requires_arc     = true
-  s.platforms        = { :ios => "8.0", :tvos => "9.2" }
+  s.platforms        = { :ios => "11.0", :tvos => "9.2" }
 
   s.dependency 'React'
-  s.dependency 'NMSSH'
+  s.dependency 'NMSSH', '2.3.1'
 end

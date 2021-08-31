@@ -1,5 +1,4 @@
 declare module "react-native-ssh-sftp" {
-  type Callback = (error: string | any, output?: string) => void;
   export type Handler = (output: string) => void;
   export type PtyType = "vanilla" | "vt100" | "vt102" | "vt220" | "ansi" | "xterm";
   export type Event = "Shell";
@@ -8,27 +7,26 @@ declare module "react-native-ssh-sftp" {
       address: string,
       port: number,
       username: string,
-      credential: string | { privateKey?: string; publicKey?: string; passphrase?: string },
-      callback?: Callback
+      credential: string | { privateKey?: string; publicKey?: string; passphrase?: string }
     );
-    startShell: (ptyType: PtyType, callback: Callback) => void;
-    writeToShell: (command: string, callback: Callback) => void;
+    startShell: (ptyType: PtyType) => Promise<string>;
+    writeToShell: (command: string) => Promise<string>;
     on: (event: Event, handler: Handler) => void;
     closeShell: () => void;
-    connect: (callback: Callback) => void;
-    connectSFTP: (callback: Callback) => void;
-    sftpLs: (path: string, callback: Callback) => void;
-    sftpRename: (oldPath: string, newPath: string, callback: Callback) => void;
-    sftpMkdir: (path: string, callback: Callback) => void;
-    sftpRm: (path: string, callback: Callback) => void;
-    sftpRmdir: (path: string, callback: Callback) => void;
-    sftpUpload: (filePath: string, path: string, callback: Callback) => void;
+    connect: () => Promise<void>;
+    connectSFTP: () => Promise<void>;
+    sftpLs: (path: string) => Promise<string>;
+    sftpRename: (oldPath: string, newPath: string) => Promise<void>;
+    sftpMkdir: (path: string) => Promise<void>;
+    sftpRm: (path: string) => Promise<void>;
+    sftpRmdir: (path: string) => Promise<void>;
+    sftpUpload: (filePath: string, path: string) => Promise<void>;
     sftpCancelUpload: () => void;
-    sftpDownload: (path: string, toPath: string, callback: Callback) => void;
+    sftpDownload: (path: string, toPath: string) => Promise<string>;
     sftpCancelDownload: () => void;
     disconnectSFTP: () => void;
     disconnect: () => void;
-    execute: (command: string, callback: Callback) => void;
+    execute: (command: string) => Promise<string>;
   }
 
   export default SSHClient;

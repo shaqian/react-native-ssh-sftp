@@ -6,7 +6,7 @@ const RNSSHClientEmitter = new NativeEventEmitter(RNSSHClient);
 
 class SSHClient {
   // passwordOrKey: password or {privateKey: value, [publicKey: value, passphrase: value]}
-  constructor(host, port, username, passwordOrKey, callback) {
+  constructor(host, port, username, passwordOrKey) {
     this._key = Math.floor((1 + Math.random()) * 0x10000)
       .toString(16)
       .substring(1);
@@ -15,7 +15,6 @@ class SSHClient {
     this.port = port;
     this.username = username;
     this.passwordOrKey = passwordOrKey;
-    this.connect(callback);
   }
 
   _handleEvent(event) {
@@ -28,65 +27,73 @@ class SSHClient {
     this.handlers[event] = handler;
   }
 
-  connect(callback) {
-    if (Platform.OS === "android") {
-      if (typeof this.passwordOrKey === "string")
-        RNSSHClient.connectToHostByPassword(
+  connect() {
+    return new Promise((resolve, reject) => {
+      if (Platform.OS === "android") {
+        if (typeof this.passwordOrKey === "string")
+          RNSSHClient.connectToHostByPassword(
+            this.host,
+            this.port,
+            this.username,
+            this.passwordOrKey,
+            this._key,
+            (error) => {
+              error ? reject(error) : resolve();
+            }
+          );
+        else
+          RNSSHClient.connectToHostByKey(
+            this.host,
+            this.port,
+            this.username,
+            this.passwordOrKey,
+            this._key,
+            (error) => {
+              error ? reject(error) : resolve();
+            }
+          );
+      } else {
+        RNSSHClient.connectToHost(
           this.host,
           this.port,
           this.username,
           this.passwordOrKey,
           this._key,
           (error) => {
-            callback && callback(error);
+            error ? reject(error) : resolve();
           }
         );
-      else
-        RNSSHClient.connectToHostByKey(
-          this.host,
-          this.port,
-          this.username,
-          this.passwordOrKey,
-          this._key,
-          (error) => {
-            callback && callback(error);
-          }
-        );
-    } else {
-      RNSSHClient.connectToHost(
-        this.host,
-        this.port,
-        this.username,
-        this.passwordOrKey,
-        this._key,
-        (error) => {
-          callback && callback(error);
-        }
-      );
-    }
+      }
+    });
   }
 
-  execute(command, callback) {
-    RNSSHClient.execute(command, this._key, (error, response) => {
-      callback && callback(error, response);
+  execute(command) {
+    return new Promise((resolve, reject) => {
+      RNSSHClient.execute(command, this._key, (error, response) => {
+        error ? reject(error) : resolve(response);
+      });
     });
   }
 
   // ptyType: vanilla, vt100, vt102, vt220, ansi, xterm
-  startShell(ptyType, callback) {
-    if (Platform.OS === "ios") {
-      this.shellListener = RNSSHClientEmitter.addListener("Shell", this._handleEvent.bind(this));
-    } else {
-      this.shellListener = DeviceEventEmitter.addListener("Shell", this._handleEvent.bind(this));
-    }
-    RNSSHClient.startShell(this._key, ptyType, (error, response) => {
-      callback && callback(error, response);
+  startShell(ptyType) {
+    return new Promise((resolve, reject) => {
+      if (Platform.OS === "ios") {
+        this.shellListener = RNSSHClientEmitter.addListener("Shell", this._handleEvent.bind(this));
+      } else {
+        this.shellListener = DeviceEventEmitter.addListener("Shell", this._handleEvent.bind(this));
+      }
+      RNSSHClient.startShell(this._key, ptyType, (error, response) => {
+        error ? reject(error) : resolve(response);
+      });
     });
   }
 
-  writeToShell(command, callback) {
-    RNSSHClient.writeToShell(command, this._key, (error, response) => {
-      callback && callback(error, response);
+  writeToShell(command) {
+    return new Promise((resolve, reject) => {
+      RNSSHClient.writeToShell(command, this._key, (error, response) => {
+        error ? reject(error) : resolve(response);
+      });
     });
   }
 
@@ -98,64 +105,78 @@ class SSHClient {
     RNSSHClient.closeShell(this._key);
   }
 
-  connectSFTP(callback) {
-    RNSSHClient.connectSFTP(this._key, (error) => {
-      callback && callback(error);
-      if (Platform.OS === "ios") {
-        this.downloadProgressListener = RNSSHClientEmitter.addListener(
-          "DownloadProgress",
-          this._handleEvent.bind(this)
-        );
-        this.uploadProgressListener = RNSSHClientEmitter.addListener(
-          "UploadProgress",
-          this._handleEvent.bind(this)
-        );
-      } else {
-        this.downloadProgressListener = DeviceEventEmitter.addListener(
-          "DownloadProgress",
-          this._handleEvent.bind(this)
-        );
-        this.uploadProgressListener = DeviceEventEmitter.addListener(
-          "UploadProgress",
-          this._handleEvent.bind(this)
-        );
-      }
+  connectSFTP() {
+    return new Promise((resolve, reject) => {
+      RNSSHClient.connectSFTP(this._key, (error) => {
+        error ? reject(error) : resolve();
+        if (Platform.OS === "ios") {
+          this.downloadProgressListener = RNSSHClientEmitter.addListener(
+            "DownloadProgress",
+            this._handleEvent.bind(this)
+          );
+          this.uploadProgressListener = RNSSHClientEmitter.addListener(
+            "UploadProgress",
+            this._handleEvent.bind(this)
+          );
+        } else {
+          this.downloadProgressListener = DeviceEventEmitter.addListener(
+            "DownloadProgress",
+            this._handleEvent.bind(this)
+          );
+          this.uploadProgressListener = DeviceEventEmitter.addListener(
+            "UploadProgress",
+            this._handleEvent.bind(this)
+          );
+        }
+      });
     });
   }
 
-  sftpLs(path, callback) {
-    RNSSHClient.sftpLs(path, this._key, (error, response) => {
-      callback && callback(error, response);
+  sftpLs(path) {
+    return new Promise((resolve, reject) => {
+      RNSSHClient.sftpLs(path, this._key, (error, response) => {
+        error ? reject(error) : resolve(response);
+      });
     });
   }
 
-  sftpRename(oldPath, newPath, callback) {
-    RNSSHClient.sftpRename(oldPath, newPath, this._key, (error) => {
-      callback && callback(error);
+  sftpRename(oldPath, newPath) {
+    return new Promise((resolve, reject) => {
+      RNSSHClient.sftpRename(oldPath, newPath, this._key, (error) => {
+        error ? reject(error) : resolve();
+      });
     });
   }
 
-  sftpMkdir(path, callback) {
-    RNSSHClient.sftpMkdir(path, this._key, (error) => {
-      callback && callback(error);
+  sftpMkdir(path) {
+    return new Promise((resolve, reject) => {
+      RNSSHClient.sftpMkdir(path, this._key, (error) => {
+        error ? reject(error) : resolve();
+      });
     });
   }
 
-  sftpRm(path, callback) {
-    RNSSHClient.sftpRm(path, this._key, (error) => {
-      callback && callback(error);
+  sftpRm(path) {
+    return new Promise((resolve, reject) => {
+      RNSSHClient.sftpRm(path, this._key, (error) => {
+        error ? reject(error) : resolve();
+      });
     });
   }
 
-  sftpRmdir(path, callback) {
-    RNSSHClient.sftpRmdir(path, this._key, (error) => {
-      callback && callback(error);
+  sftpRmdir(path) {
+    return new Promise((resolve, reject) => {
+      RNSSHClient.sftpRmdir(path, this._key, (error) => {
+        error ? reject(error) : resolve();
+      });
     });
   }
 
-  sftpUpload(filePath, path, callback) {
-    RNSSHClient.sftpUpload(filePath, path, this._key, (error) => {
-      callback && callback(error);
+  sftpUpload(filePath, path) {
+    return new Promise((resolve, reject) => {
+      RNSSHClient.sftpUpload(filePath, path, this._key, (error) => {
+        error ? reject(error) : resolve();
+      });
     });
   }
 
@@ -163,9 +184,11 @@ class SSHClient {
     RNSSHClient.sftpCancelUpload(this._key);
   }
 
-  sftpDownload(path, toPath, callback) {
-    RNSSHClient.sftpDownload(path, toPath, this._key, (error, response) => {
-      callback && callback(error, response);
+  sftpDownload(path, toPath) {
+    return new Promise((resolve, reject) => {
+      RNSSHClient.sftpDownload(path, toPath, this._key, (error, response) => {
+        error ? reject(error) : resolve(response);
+      });
     });
   }
 

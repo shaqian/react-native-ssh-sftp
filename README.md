@@ -6,20 +6,11 @@ SSH and SFTP client library for React Native.
 
 ```
 npm install react-native-ssh-sftp --save
+
+yarn add react-native-ssh-sftp --save
 ```
 
-## Demo
-
-![example](https://raw.githubusercontent.com/SpiriaJWF/react-native-ssh-sftp/master/example.gif)
-
-- This library is also used in iOS app PiHelper.
-
-<a href="https://itunes.apple.com/app/pihelper/id1369930932"><img src="https://is4-ssl.mzstatic.com/image/thumb/Purple128/v4/ba/5b/59/ba5b592a-5446-1c21-6703-3eb3fb25007e/AppIcon-1x_U007emarketing-85-220-9.png/246x0w.jpg" align="left" height="75" width="75" ></a>
-<br />
-<br />
-<br />
-
-## Run demo
+## Demo (deprecated)
 
 ### iOS
 
@@ -47,9 +38,8 @@ react-native run-android
 ```javascript
 import SSHClient from "react-native-ssh-sftp";
 
-let client = new SSHClient("10.0.0.10", 22, "user", "password", (error) => {
-  if (error) console.warn(error);
-});
+let client = new SSHClient("10.0.0.10", 22, "user", "password");
+await client.connect();
 ```
 
 ### Create a client using public key authentication
@@ -57,15 +47,9 @@ let client = new SSHClient("10.0.0.10", 22, "user", "password", (error) => {
 ```javascript
 import SSHClient from "react-native-ssh-sftp";
 
-let client = new SSHClient(
-  "10.0.0.10",
-  22,
-  "user",
-  { privateKey: "-----BEGIN RSA......" },
-  (error) => {
-    if (error) console.warn(error);
-  }
-);
+let client = new SSHClient("10.0.0.10", 22, "user", { privateKey: "-----BEGIN RSA......" });
+
+await client.connect();
 ```
 
 - Public key authentication also supports:
@@ -86,10 +70,7 @@ client.disconnect();
 
 ```javascript
 var command = "ls -l";
-client.execute(command, (error, output) => {
-  if (error) console.warn(error);
-  if (output) console.warn(output);
-});
+const output = await client.execute(command);
 ```
 
 ### Shell
@@ -100,26 +81,20 @@ client.execute(command, (error, output) => {
 
 ```javascript
 var ptyType = "vanilla";
-client.startShell(ptyType, (error) => {
-  if (error) console.warn(error);
-});
+await client.startShell(ptyType);
 ```
 
 #### Read from shell:
 
 ```javascript
-client.on("Shell", (event) => {
-  if (event) console.warn(event);
-});
+await client.on("Shell");
 ```
 
 #### Write to shell:
 
 ```javascript
 var str = "ls -l\n";
-client.writeToShell(str, (error) => {
-  if (error) console.warn(error);
-});
+await client.writeToShell(str);
 ```
 
 #### Close shell:
@@ -133,66 +108,50 @@ client.closeShell();
 #### Connect SFTP
 
 ```javascript
-client.connectSFTP((error) => {
-  if (error) console.warn(error);
-});
+await client.connectSFTP();
 ```
 
 #### List directory:
 
 ```javascript
 var path = ".";
-client.sftpLs(path, (error, response) => {
-  if (error) console.warn(error);
-  if (response) console.warn(response);
-});
+const response = await client.sftpLs(path);
 ```
 
 #### Create directory:
 
 ```javascript
-client.sftpMkdir("dirName", (error) => {
-  if (error) console.warn(error);
-});
+await client.sftpMkdir("dirName");
 ```
 
 #### Rename file or directory:
 
 ```javascript
-client.sftpRename("oldName", "newName", (error) => {
-  if (error) console.warn(error);
-});
+await client.sftpRename("oldName", "newName");
 ```
 
 #### Remove directory:
 
 ```javascript
-client.sftpRmdir("dirName", (error) => {
-  if (error) console.warn(error);
-});
+await client.sftpRmdir("dirName");
 ```
 
 #### Remove file:
 
 ```javascript
-client.sftpRm("fileName", (error) => {
-  if (error) console.warn(error);
-});
+await client.sftpRm("fileName");
 ```
 
 #### Download file:
 
 ```javascript
-client.sftpDownload(
-  "[path-to-remote-file]",
-  "[path-to-local-direcotry]",
-  (error, downloadedFilePath) => {
-    if (error) console.warn(error);
-    if (downloadedFilePath) console.warn(downloadedFilePath);
-  }
-);
+client
+  .sftpDownload("[path-to-remote-file]", "[path-to-local-direcotry]")
+  .then((downloadedFilePath) => {
+    console.log(downloadedFilePath);
+  });
 
-// Downlowd progress
+// Download progress
 client.on("DownloadProgress", (event) => {
   console.warn(event);
 });
@@ -204,9 +163,7 @@ client.sftpCancelDownload();
 #### Upload file:
 
 ```javascript
-client.sftpUpload("[path-to-local-file]", "[path-to-remote-directory]", (error) => {
-  if (error) console.warn(error);
-});
+client.sftpUpload("[path-to-local-file]", "[path-to-remote-directory]");
 
 // Upload progress
 client.on("UploadProgress", (event) => {

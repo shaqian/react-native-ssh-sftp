@@ -135,7 +135,11 @@ class SSHClient {
   sftpLs(path) {
     return new Promise((resolve, reject) => {
       RNSSHClient.sftpLs(path, this._key, (error, response) => {
-        error ? reject(error) : resolve(response);
+        const resultArray = [];
+        for (let i = 0; i < response.length; i++) {
+          resultArray.push(JSON.parse(response[i]));
+        }
+        error ? reject(error) : resolve(resultArray);
       });
     });
   }

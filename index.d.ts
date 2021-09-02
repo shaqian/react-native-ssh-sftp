@@ -1,4 +1,15 @@
 declare module "react-native-ssh-sftp" {
+  export type FileList = {
+    filename: string;
+    isDirectory: number;
+    modificationDate: string;
+    lastAccess: string;
+    fileSize: number;
+    ownerUserID: number;
+    ownerGroupID: number;
+    permissions: string;
+    flags: number;
+  };
   export type Handler = (output: string) => void;
   export type PtyType = "vanilla" | "vt100" | "vt102" | "vt220" | "ansi" | "xterm";
   export type Event = "Shell";
@@ -15,7 +26,7 @@ declare module "react-native-ssh-sftp" {
     closeShell: () => void;
     connect: () => Promise<void>;
     connectSFTP: () => Promise<void>;
-    sftpLs: (path: string) => Promise<string>;
+    sftpLs: (path: string) => Promise<FileList[]>;
     sftpRename: (oldPath: string, newPath: string) => Promise<void>;
     sftpMkdir: (path: string) => Promise<void>;
     sftpRm: (path: string) => Promise<void>;

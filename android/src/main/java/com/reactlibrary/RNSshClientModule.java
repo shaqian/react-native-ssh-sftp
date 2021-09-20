@@ -163,6 +163,22 @@ public class RNSshClientModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void forwardL(final Integer lPort, final Integer rPort, final String key, final Callback callback) {
+    new Thread(new Runnable()  {
+      public void run() {
+        try {
+          SSHClient client = clientPool.get(key);
+          client.setPortForwardingL(lPort, "*", rPort)
+          callback.invoke();
+        } catch (JSchException error) {
+          Log.e(LOGTAG, "Error connecting forwardL:" + error.getMessage());
+          callback.invoke(error.getMessage());
+        }
+      }
+    }).start();
+  }
+
+  @ReactMethod
   public void startShell(final String key, final String ptyType, final Callback callback) {
     new Thread(new Runnable()  {
       public void run() {

@@ -255,7 +255,7 @@ client.disconnectSFTP();
 
 #### Forward Local Port:
 ```
-client.forwardL(45000, 22, () => console.log('Ports Forwarded'))
+client.forwardL(45000, 22, () => console.log('Ports Forwarded')) // 45000 = localport, 22 = remoteport
 ```
 
 ## Credits

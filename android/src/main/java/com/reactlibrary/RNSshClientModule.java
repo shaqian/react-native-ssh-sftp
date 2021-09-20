@@ -168,7 +168,8 @@ public class RNSshClientModule extends ReactContextBaseJavaModule {
       public void run() {
         try {
           SSHClient client = clientPool.get(key);
-          client.setPortForwardingL(lPort, "*", rPort);
+          Session session = client._session;
+          session.setPortForwardingL(lPort, "*", rPort);
           callback.invoke();
         } catch (JSchException error) {
           Log.e(LOGTAG, "Error connecting forwardL:" + error.getMessage());

@@ -1,8 +1,8 @@
-import { Platform, NativeModules, NativeEventEmitter, DeviceEventEmitter } from "react-native";
+import { DeviceEventEmitter, NativeEventEmitter, NativeModules, Platform } from "react-native";
 
 const { RNSSHClient } = NativeModules;
 
-const RNSSHClientEmitter = new NativeEventEmitter(RNSSHClient);
+const RNSSHClientEmitter = RNSSHClient ? new NativeEventEmitter(RNSSHClient) : null;
 
 class SSHClient {
   // passwordOrKey: password or {privateKey: value, [publicKey: value, passphrase: value]}

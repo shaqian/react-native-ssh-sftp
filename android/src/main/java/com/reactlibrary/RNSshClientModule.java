@@ -268,7 +268,7 @@ public class RNSshClientModule extends ReactContextBaseJavaModule {
     new Thread(new Runnable()  {
       public void run() {
         SSHClient client = clientPool.get(key);
-        if (client._sftpSession != null) {
+        if (client != null && client._sftpSession != null) {
           client._sftpSession.disconnect();
         }
       }
@@ -449,7 +449,9 @@ public class RNSshClientModule extends ReactContextBaseJavaModule {
     this.disconnectSFTP(key);
 
     SSHClient client = clientPool.get(key);
-    client._session.disconnect();
+    if (client != null && client._session != null) {
+      client._session.disconnect();
+    }
   }
 
   private class progressMonitor implements SftpProgressMonitor {

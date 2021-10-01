@@ -445,12 +445,14 @@ public class RNSshClientModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void disconnect(final String key) {
-    this.closeShell(key);
-    this.disconnectSFTP(key);
-
     SSHClient client = clientPool.get(key);
-    if (client != null && client._session != null) {
-      client._session.disconnect();
+    if(client != null) {
+      this.closeShell(key);
+      this.disconnectSFTP(key);
+
+      if (client._session != null) {
+        client._session.disconnect();
+      }
     }
   }
 

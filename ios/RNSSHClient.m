@@ -313,7 +313,8 @@ RCT_EXPORT_METHOD(sftpDownload:(NSString *)path
 //            NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 //            NSString* documentsDirectory = [paths objectAtIndex:0];
 //            NSString* filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, [path lastPathComponent]];
-            NSString* filePath = [NSString stringWithFormat:@"%@%@", toPath, [path lastPathComponent]];
+            NSArray *components = @[toPath, [path lastPathComponent]];
+            NSString *filePath = [NSString pathWithComponents:components];
 
             NSLog(@"%@", filePath);
 

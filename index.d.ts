@@ -12,7 +12,7 @@ declare module "react-native-ssh-sftp" {
   };
   export type Handler = (output: string) => void;
   export type PtyType = "vanilla" | "vt100" | "vt102" | "vt220" | "ansi" | "xterm";
-  export type Event = "Shell";
+  export type Event = "Shell" | "UploadProgress" | "DownloadProgress";
   class SSHClient {
     constructor(
       address: string,

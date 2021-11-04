@@ -24,7 +24,7 @@ class SSHClient {
   }
 
   _stripPrefix(path) {
-    path.startsWith("file://") ? path.slice(7) : path;
+    return path.startsWith("file://") ? path.slice(7) : path;
   }
 
   on(event, handler) {

@@ -23,6 +23,8 @@ class SSHClient {
     }
   }
 
+  _stripPrefix = (path) => path?.split("file://").pop();
+
   on(event, handler) {
     this.handlers[event] = handler;
   }
@@ -178,7 +180,7 @@ class SSHClient {
 
   sftpUpload(filePath, path) {
     return new Promise((resolve, reject) => {
-      RNSSHClient.sftpUpload(filePath, path, this._key, (error) => {
+      RNSSHClient.sftpUpload(this._stripPrefix(filePath), path, this._key, (error) => {
         error ? reject(error) : resolve();
       });
     });
@@ -190,7 +192,7 @@ class SSHClient {
 
   sftpDownload(path, toPath) {
     return new Promise((resolve, reject) => {
-      RNSSHClient.sftpDownload(path, toPath, this._key, (error, response) => {
+      RNSSHClient.sftpDownload(path, this._stripPrefix(toPath), this._key, (error, response) => {
         error ? reject(error) : resolve(response);
       });
     });

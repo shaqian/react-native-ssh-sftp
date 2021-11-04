@@ -10,26 +10,7 @@ npm install react-native-ssh-sftp --save
 yarn add react-native-ssh-sftp --save
 ```
 
-## Demo (deprecated)
-
-### iOS
-
-```
-cd example
-cd ios
-pod install
-cd ..
-npm install
-react-native run-ios
-```
-
-### Android
-
-```
-cd example
-npm install
-react-native run-android
-```
+##### Demo (deprecated)
 
 ## Usage
 
@@ -121,40 +102,39 @@ const response = await client.sftpLs(path);
 #### Create directory:
 
 ```javascript
-await client.sftpMkdir("dirName");
+await client.sftpMkdir("/tmp/dirName");
 ```
 
 #### Rename file or directory:
 
 ```javascript
-await client.sftpRename("oldName", "newName");
+await client.sftpRename("/tmp/test.tar.gz", "/tmp/test1.tar.gz");
 ```
 
 #### Remove directory:
 
 ```javascript
-await client.sftpRmdir("dirName");
+await client.sftpRmdir("/tmp");
 ```
 
 #### Remove file:
 
 ```javascript
-await client.sftpRm("fileName");
+await client.sftpRm("/tmp/test.tar.gz");
 ```
 
 #### Download file:
 
 ```javascript
-client
-  .sftpDownload("[path-to-remote-file]", "[path-to-local-direcotry]")
-  .then((downloadedFilePath) => {
-    console.log(downloadedFilePath);
-  });
-
 // Download progress
-client.on("DownloadProgress", (event) => {
-  console.warn(event);
+client.on("DownloadProgress", (percentage) => {
+  console.warn(percentage);
 });
+
+const downloadedFilePath = await client.sftpDownload(
+  "[path-to-remote-file]",
+  "[path-to-local-direcotry]"
+);
 
 // Cancel download:
 client.sftpCancelDownload();
@@ -163,12 +143,12 @@ client.sftpCancelDownload();
 #### Upload file:
 
 ```javascript
-client.sftpUpload("[path-to-local-file]", "[path-to-remote-directory]");
-
 // Upload progress
-client.on("UploadProgress", (event) => {
-  console.warn(event);
+client.on("UploadProgress", (percentage) => {
+  console.warn(percentage);
 });
+
+await client.sftpUpload("[path-to-local-file]", "[path-to-remote-directory]");
 
 // Cancel upload:
 client.sftpCancelUpload();

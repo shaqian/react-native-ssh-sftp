@@ -10,8 +10,18 @@ const { RNSSHClient } = NativeModules;
 const RNSSHClientEmitter = new NativeEventEmitter(RNSSHClient);
 
 class SSHClient {
+    private readonly _key: string;
+    private readonly handlers: any;
+    private readonly host: string;
+    private readonly port: number;
+    private readonly username: string;
+    private readonly passwordOrKey: string | { privateKey: string } | {privateKey: string, passphrase: string};
+    shellListener: any
+    downloadProgressListener: any;
+    uploadProgressListener: any;
+
   // passwordOrKey: password or {privateKey: value, [publicKey: value, passphrase: value]}
-	constructor(host, port, username, passwordOrKey, callback) {
+	constructor(host: string, port: number, username: string, passwordOrKey: string, callback: (error: unknown) => void) {
     this._key = Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
     this.handlers = {};
     this.host = host;

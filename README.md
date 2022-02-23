@@ -253,6 +253,11 @@ client.sftpCancelUpload();
 client.disconnectSFTP();
 ```
 
+#### Forward Local Port:
+```
+client.forwardL(45000, 22, () => console.log('Ports Forwarded')) // 45000 = localport, 22 = remoteport
+```
+
 ## Credits
 
 * iOS SSH library: [NMSSH](https://github.com/NMSSH/NMSSH)

@@ -57,6 +57,12 @@ class SSHClient {
     });
   }
 
+  forwardL(lPort, rPort, callback) {
+    RNSSHClient.forwardL(lPort, rPort, this._key, (error, response) => {
+      callback && callback(error, response);
+    });
+  }
+
   // ptyType: vanilla, vt100, vt102, vt220, ansi, xterm
 	startShell(ptyType, callback) {
     if (Platform.OS === 'ios') {

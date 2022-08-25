@@ -180,7 +180,15 @@ public class RNSshClientModule extends ReactContextBaseJavaModule {
           client._dataOutputStream = new DataOutputStream(channel.getOutputStream());
 
           callback.invoke();
+        } catch (JSchException error) {
+          Log.e(LOGTAG, "Error starting shell: " + error.getMessage());
+          callback.invoke(error.getMessage());
+        } catch (IOException error) {
+          Log.e(LOGTAG, "Error starting shell: " + error.getMessage());
+          callback.invoke(error.getMessage());
+        }
 
+        try {
 //        int charVal;
           String line;
           while (client._bufferedReader != null && (line = client._bufferedReader.readLine()) != null) {
@@ -193,11 +201,9 @@ public class RNSshClientModule extends ReactContextBaseJavaModule {
           }
 
         } catch (JSchException error) {
-          Log.e(LOGTAG, "Error starting shell: " + error.getMessage());
-          callback.invoke(error.getMessage());
+          Log.e(LOGTAG, "Error reading shell output: " + error.getMessage());
         } catch (IOException error) {
-          Log.e(LOGTAG, "Error starting shell: " + error.getMessage());
-          callback.invoke(error.getMessage());
+          Log.e(LOGTAG, "Error reading shell output: " + error.getMessage());
         }
       }
     }).start();
